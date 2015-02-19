@@ -1,0 +1,18 @@
+import re
+file = open("watched.txt","r")
+
+s = file.readline()
+#n= map(int,re.findall("\s+", s))
+dic = {}
+while(s):
+    rating = map(int,re.findall("\d+",s,))
+    temp = re.findall("\S+", s,)
+    m = len(temp)
+    s = ""
+    for i in range(m-1):
+        s+= temp[i]+" "
+    dic[s] = rating
+    s = file.readline()
+for key, rating in dic.iteritems():
+    print(key),
+    print(rating)

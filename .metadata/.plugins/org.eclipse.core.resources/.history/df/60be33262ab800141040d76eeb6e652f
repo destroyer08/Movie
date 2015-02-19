@@ -1,0 +1,49 @@
+import re
+import imdb
+def show_watched(dic):
+    print("\n********YOUR WATCHED MOVIES AND RATING********\n")
+    for key, rating in dic.iteritems():
+        print("{} {}".format(key,rating[0]))
+       
+def get_imdb_rating(dic):
+    ia = imdb.IMDb()
+    dic2 = {}
+    for title in dic.iterkeys():
+        t = str(title).strip()
+        s_result = ia.search_movie(t)
+        the_unt = s_result[0]
+        ia.update(the_unt)
+        irate = the_unt["rating"]
+        dic2[title] = irate
+        #print("{} {}".format(t,irate))
+    return(dic2)
+def show_all(dic,dic2):
+    for title in dic.iterkeys():
+        print("{} {} {}".format(str(title).strip(),dic[title][0],dic2[title]))
+        
+file = open("watched.txt","r")
+file2 = open("want_to.txt","r")
+
+s = file.readline()
+#n= map(int,re.findall("\s+", s))
+dic = {}
+while(s):
+    rating = map(int,re.findall("\d+",s,))
+    temp = re.findall("\S+", s,)
+    m = len(temp)
+    s = ""
+    for i in range(m-1):
+        s+= temp[i]+" "
+    dic[s] = rating
+    s = file.readline()
+s = file2.readline()
+watch = []
+while(s):
+    watch.append(s)
+    s = file2.readline()
+    
+#show_watched(dic)
+#dic2 = get_imdb_rating(dic)
+#show_all()'
+for i in range(len(watch)):
+    print(watch[i])
