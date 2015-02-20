@@ -1,5 +1,7 @@
 import re
 import imdb
+from decimal import Decimal
+import operator
 def show_watched(dic):
     print("\n\n********YOUR WATCHED MOVIES AND RATING********\n")
     for key, rating in dic.iteritems():
@@ -10,10 +12,30 @@ def show_all(dic,dic2):
     for title in dic.iterkeys():
         print("{} {} {}".format(str(title).strip(),dic[title],dic2[title]))
 
+def show_all_norm(dic,dic2):
+    print("\n\n********YOUR WATCHED MOVIE RATING WITH IMDB RATING(NORMALIZE)********\n")
+    for title in dic.iterkeys():
+        print("{} {} {}".format(str(title).strip(),dic[title],dic2[title]))
+
 def show_watch(dic3):
     print("\n\n********YOUR WANT TO WATCH MOVIES WITH IMDB RATING********\n")
     for title in dic3.iterkeys():
         print("{} {}".format(str(title).strip(),dic3[title]))
+        
+def show_dev(dev):
+    print("\n\n********DEVIATIONS********\n")
+    for t1, ele in dev.iteritems():
+        print("---------------------------")
+        print(t1)
+        print("---------------------------")
+        for t2, d in ele.iteritems():
+            print("{} {}".format(t2, d))
+
+def show_pred(predict):
+    print("\n\n********PREDICTED RATING********\n")
+    #predict = sorted(predict.items(),key = operator.itemgetter(1))
+    for t, rate in predict.iteritems():
+        print("{} {}".format(t,rate))
        
 def get_imdb_rating(dic):
     ia = imdb.IMDb()
@@ -39,8 +61,36 @@ def get_imdb_rating_watch(watch):
         dic3[title] = irate
         #print("{} {}".format(t,irate))
     return(dic3)
+def norm(dic2,omin,omax,nmin,nmax):
+    con_dic = {}
+    oRange = omax - omin
+    nRange = nmax - nmin
+    for title,rating in dic2.iteritems():
+        NewValue = (((rating - omin) * nRange) / oRange) + nmin
+        con_dic[title] = Decimal(str(NewValue)).quantize(Decimal('0.01'))
+    return(con_dic)
 
-        
+def devi(dic2,dic3):
+    
+    dev = {}
+    for t1,r1 in dic3.iteritems():
+        temp ={}
+        for t2,r2 in dic2.iteritems():
+            temp[t2] = r1-r2
+        dev[str(t1).strip("\n")] = temp
+    return(dev)
+
+def pred(dev,dic):
+    predict = {}
+    for t1, elem in dev.iteritems():
+        num = 0
+        den = 0
+        for t2, d in elem.iteritems():
+            num += dic[t2] + d
+            den += 1
+        predict[t1] = num/den
+    return(predict)
+    
 file = open("watched.txt","r")
 file2 = open("want_to.txt","r")
 
@@ -61,11 +111,17 @@ watch = []
 while(s):
     watch.append(s)
     s = file2.readline()
-#dic3 = get_imdb_rating_watch(watch)
-#dic2 = get_imdb_rating(dic)
+dic3 = get_imdb_rating_watch(watch)
+dic2 = get_imdb_rating(dic)
+con_dic2 = norm(dic2,1,10,1,5)
+con_dic3 = norm(dic3,1,10,1,5)
+dev = devi(con_dic2, con_dic3)
 show_watched(dic)
-#show_all(dic,dic2)
-
-#show_watch(dic3)
+show_all(dic,dic2)
+show_all_norm(dic, con_dic2)
+show_watch(con_dic3)
+show_dev(dev)
+predict = pred(dev, dic)
+show_pred(predict)
 #show_all()'
 
