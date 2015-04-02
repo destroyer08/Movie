@@ -1,0 +1,20 @@
+-- VERSION_4
+-- START DISKCACHE
+C:\Personal\pro1\Movie\.metadata\.plugins\org.eclipse.core.resources\.projects\sample\com.python.pydev.analysis\v2_indexcache
+one|1427797608096|C:\Personal\pro1\Movie\sample\one.py
+-- END DISKCACHE
+-- START DICTIONARY
+1
+1=one
+-- END DICTIONARY
+-- START TREE 1
+5
+m|1|m!11@
+ma|1|ma!11@
+mat|1|match!11@
+pat|1|pat!11@
+str|2|str2!11@str!11@
+-- END TREE
+-- START TREE 2
+0
+-- END TREE

@@ -1,23 +1,24 @@
 -- VERSION_4
 -- START DISKCACHE
 C:\Personal\pro1\Movie\.metadata\.plugins\org.eclipse.core.resources\.projects\rating_movies\com.python.pydev.analysis\v2_indexcache
-start|1424434577039|C:\Personal\pro1\Movie\rating_movies\start.py
+start|1427972463697|C:\Personal\pro1\Movie\rating_movies\start.py
 -- END DISKCACHE
 -- START DICTIONARY
 1
 1=start
 -- END DICTIONARY
 -- START TREE 1
-14
-!<m|0|
-con|2|con_dic3!11@con_dic2!11@
-dev|2|dev!11@devi!10@
-dic|3|dic3!11@dic!11@dic2!11@
+15
+cat|1|cate!11@
+con|0|
+cos|0|
+dev|1|devi!10@
+dic|1|dic!11@
 fil|2|file2!11@file!11@
-get|2|get_imdb_rating!10@get_imdb_rating_watch!10@
+get|4|get_cosine!10@get_imdb_rating!10@get_imdb_rating_watch!10@get_imdb_cate!10@
 m|1|m!11@
 nor|1|norm!10@
-pre|2|predict!11@pred!10@
+pre|1|pred!10@
 rat|1|rating!11@
 s|1|s!11@
 sho|6|show_dev!10@show_pred!10@show_watched!10@show_watch!10@show_all!10@show_all_norm!10@

@@ -1,0 +1,6 @@
+import sys
+import re
+str = "callablecall"
+pat = "call"
+match = re.search(r'calla', str)
+print(match.group())

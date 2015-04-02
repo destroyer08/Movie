@@ -1,0 +1,6 @@
+import sys
+import re
+str = "callableCall"
+pat = "call"
+match = re.search(r'\Wall', str)
+print(match.group())

@@ -1,0 +1,6 @@
+import sys
+import re
+str = "xyz alice90.b@google.com purple monkey"
+pat = "call"
+match = re.search(r'[\d\w.-]+@\w+[.]\w+', str)
+print(match.group())

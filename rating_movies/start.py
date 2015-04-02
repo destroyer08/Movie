@@ -2,6 +2,7 @@ import re
 import imdb
 from decimal import Decimal
 import operator
+from math import sqrt
 def show_watched(dic):
     print("\n\n********YOUR WATCHED MOVIES AND RATING********\n")
     for key, rating in dic.iteritems():
@@ -90,6 +91,43 @@ def pred(dev,dic):
             den += 1
         predict[t1] = num/den
     return(predict)
+def get_imdb_cate(dic):
+    ia = imdb.IMDb()
+    dic3 = {}
+    dic2 = {}
+    for title in dic.iterkeys():
+        
+        t = str(title).strip()
+        s_result = ia.search_movie(t)
+        the_unt = s_result[0]
+        ia.update(the_unt)
+        irate = the_unt["genre"]
+        for item in irate:
+            if item in dic2:
+                dic2[item].append(title)
+            else:
+                dic2[item]=[title]
+        
+    for k,v in dic2.items():
+        print(k),
+        print(v)
+    return(dic2)
+
+
+def get_cosine(cate,dic):
+    for k,v in cate.items():
+        print(k),
+        usum = 0
+        csum = 0
+        prod = 0
+        for item in v:
+            a = dic[item]
+            csum += 5*5
+            usum += a*a
+            prod += 5*a
+        total = prod/(sqrt(usum)*sqrt(csum))
+        print(total)
+    
     
 file = open("watched.txt","r")
 file2 = open("want_to.txt","r")
@@ -111,17 +149,20 @@ watch = []
 while(s):
     watch.append(s)
     s = file2.readline()
-dic3 = get_imdb_rating_watch(watch)
-dic2 = get_imdb_rating(dic)
-con_dic2 = norm(dic2,1,10,1,5)
-con_dic3 = norm(dic3,1,10,1,5)
-dev = devi(con_dic2, con_dic3)
-show_watched(dic)
-show_all(dic,dic2)
-show_all_norm(dic, con_dic2)
-show_watch(con_dic3)
-show_dev(dev)
-predict = pred(dev, dic)
-show_pred(predict)
+
+#dic3 = get_imdb_rating_watch(watch)
+#dic2 = get_imdb_rating(dic)
+#con_dic2 = norm(dic2,1,10,1,5)
+#con_dic3 = norm(dic3,1,10,1,5)
+#dev = devi(con_dic2, con_dic3)
+#show_watched(dic)
+#show_all(dic,dic2)
+#show_all_norm(dic, con_dic2)
+#show_watch(con_dic3)
+#show_dev(dev)
+#predict = pred(dev, dic)
+#show_pred(predict)
 #show_all()'
+cate = get_imdb_cate(dic)
+get_cosine(cate,dic)
 

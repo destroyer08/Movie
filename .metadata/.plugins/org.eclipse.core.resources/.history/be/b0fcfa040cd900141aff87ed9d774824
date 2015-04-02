@@ -1,0 +1,9 @@
+import sys
+import re
+str = "xyz alice90.b@google.com purple monkey"
+str2 = "DisplayIsAwesome"
+pat = "call"
+match = re.search(r'([\d\w.-]+)@(\w+[.]\w+)', str)
+ma = re.findall(r'[A-Z][^A-Z]*', str2)
+m = re.search(r'\d*', str2)
+print(ma)
