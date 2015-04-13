@@ -1,9 +1,9 @@
-import sys
+import sys 
 import re
-str = "xyz alice90.b@google.com purple monkey"
-str2 = "DisplayIsAwesome"
-pat = "call"
-match = re.search(r'([\d\w.-]+)@(\w+[.]\w+)', str)
-ma = re.findall(r'[A-Z][a-z]*', str2)
-m = re.search(r'\d*', str2)
-print(ma)
+import numpy as np
+import time
+
+
+
+x = np.array([[[ 0,  1],[ 2,  3],[ 4,  5],[ 6,  7]],[[ 8,  9],[10, 11],[12, 13],[14, 15]],[[16, 17],[18, 19],[20, 21],[22, 23]]])
+print(x.flatten())

@@ -3,6 +3,11 @@ import imdb
 from decimal import Decimal
 import operator
 from math import sqrt
+from unicodedata import decimal
+def show(dic,s):
+    print("\n\n********{}********\n".format(s))
+    for key, rating in dic.iteritems():
+        print("{} {}".format(key,rating))
 def show_watched(dic):
     print("\n\n********YOUR WATCHED MOVIES AND RATING********\n")
     for key, rating in dic.iteritems():
@@ -59,7 +64,7 @@ def get_imdb_rating_watch(watch):
         the_unt = s_result[0]
         ia.update(the_unt)
         irate = the_unt["rating"]
-        dic3[title] = irate
+        dic3[t] = irate
         #print("{} {}".format(t,irate))
     return(dic3)
 def norm(dic2,omin,omax,nmin,nmax):
@@ -78,7 +83,7 @@ def devi(dic2,dic3):
         temp ={}
         for t2,r2 in dic2.iteritems():
             temp[t2] = r1-r2
-        dev[str(t1).strip("\n")] = temp
+        dev[t1] = temp
     return(dev)
 
 def pred(dev,dic):
@@ -93,7 +98,6 @@ def pred(dev,dic):
     return(predict)
 def get_imdb_cate(dic):
     ia = imdb.IMDb()
-    dic3 = {}
     dic2 = {}
     for title in dic.iterkeys():
         
@@ -108,26 +112,57 @@ def get_imdb_cate(dic):
             else:
                 dic2[item]=[title]
         
-    for k,v in dic2.items():
-        print(k),
-        print(v)
+   
     return(dic2)
 
+def get_imdb_cate_watch(dic):
+    ia = imdb.IMDb()
+    dic2 = {}
+    for title in dic.iterkeys():
+        
+        t = str(title).strip()
+        s_result = ia.search_movie(t)
+        the_unt = s_result[0]
+        ia.update(the_unt)
+        irate = the_unt["genre"]
+        dic2[title] = irate
+    return(dic2)
 
+def cal_score(dic3,cos,predict):
+    temp ={}
+    res = {}
+    for key,val in dic3.items():
+        t = 0
+        c = 0
+        for cat in val:
+            if cat in cos:
+                t += cos[cat]
+                c += 1
+        if(c >0):
+            temp[key] = t/c
+        else:
+            temp[key] = c
+    for key,val in predict.iteritems():
+        res[key] = float(val) + float(temp[key])
+    return(res)
+    
+    
 def get_cosine(cate,dic):
+    cos = {}
     for k,v in cate.items():
-        print(k),
         usum = 0
         csum = 0
         prod = 0
+        for item in dic:
+            a = dic[item]
+            usum += a*a
         for item in v:
             a = dic[item]
             csum += 5*5
-            usum += a*a
             prod += 5*a
         total = prod/(sqrt(usum)*sqrt(csum))
-        print(total)
-    
+        cos[k] = total
+    return(cos)
     
 file = open("watched.txt","r")
 file2 = open("want_to.txt","r")
@@ -142,6 +177,7 @@ while(s):
     s = ""
     for i in range(m-1):
         s+= temp[i]+" "
+    s = str(s.strip())
     dic[s] = rating[0]
     s = file.readline()
 s = file2.readline()
@@ -150,19 +186,26 @@ while(s):
     watch.append(s)
     s = file2.readline()
 
-#dic3 = get_imdb_rating_watch(watch)
-#dic2 = get_imdb_rating(dic)
-#con_dic2 = norm(dic2,1,10,1,5)
-#con_dic3 = norm(dic3,1,10,1,5)
-#dev = devi(con_dic2, con_dic3)
-#show_watched(dic)
-#show_all(dic,dic2)
-#show_all_norm(dic, con_dic2)
-#show_watch(con_dic3)
-#show_dev(dev)
-#predict = pred(dev, dic)
-#show_pred(predict)
+dic3 = get_imdb_rating_watch(watch)
+dic2 = get_imdb_rating(dic)
+con_dic2 = norm(dic2,1,10,1,5)
+con_dic3 = norm(dic3,1,10,1,5)
+dev = devi(con_dic2, con_dic3)
+show(dic,"YOUR WATCHED MOVIES AND RATING")
+show_all(dic,dic2)
+show_all_norm(dic, con_dic2)
+show_watch(con_dic3)
+show_dev(dev)
+predict = pred(dev, dic)
+show_pred(predict)
 #show_all()'
 cate = get_imdb_cate(dic)
-get_cosine(cate,dic)
-
+show(cate,"WATCHED MOVIES WITH CATEGORIES")
+cos = get_cosine(cate,dic)
+show(cos,"SCORE OF EACH CATEGORY")
+watch_cate = get_imdb_cate_watch(dic3)
+show(watch_cate,"MOVIES WANT TO WATCH WITH CATEGORIES")
+rec_score = cal_score(watch_cate,cos,predict)
+show(rec_score,"FINAL RATING")
+final = norm(rec_score,0,6,0,1)
+show(final,"RECOMMENDATION SCORE")
